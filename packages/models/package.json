@@ -1,0 +1,43 @@
+{
+  "name": "@explore-ai/models",
+  "version": "0.1.0",
+  "description": "Provider-qualified AI model catalog for Sylix and Explore.",
+  "license": "MIT",
+  "author": "Sylix (Explore AI)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sylixide/explore-ai.git"
+  },
+  "keywords": [
+    "models.dev",
+    "llm",
+    "model-catalog",
+    "providers",
+    "ai-gateway"
+  ],
+  "type": "module",
+  "files": [
+    "dist",
+    "data",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./api.json": "./data/api.json",
+    "./models.json": "./data/models.json",
+    "./catalog.json": "./data/catalog.json",
+    "./stats.json": "./data/stats.json"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "refresh": "node scripts/refresh.mjs",
+    "test": "node --test test/catalog.test.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

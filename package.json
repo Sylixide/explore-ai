@@ -1,0 +1,11 @@
+{
+  "name": "explore-ai-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.15.0",
+  "scripts": {
+    "build": "pnpm --filter @explore-ai/models build",
+    "refresh": "pnpm --filter @explore-ai/models refresh",
+    "test": "pnpm --filter @explore-ai/models test"
+  }
+}

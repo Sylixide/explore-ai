@@ -1,17 +1,22 @@
 export {
   deriveVariants,
-  findModels,
-  findModelsByCanonicalId,
-  getModel,
-  getModelByCanonicalId,
-  getProvider,
-  getProviderHeader,
   resolveAdapter,
 } from "./lookup.js";
 export {
+  findModels,
+  findModelsByCanonicalId,
+  getModelByCanonicalId,
+  searchModels,
+} from "./search.js";
+export {
+  getModel,
+  getProvider,
+  getProviderHeader,
   listModels,
   listProviders,
-  providers,
+  loadProvider,
+  loadProviderModels,
+  normalizeModel,
 } from "./providers.js";
 export type {
   AdapterSpec,

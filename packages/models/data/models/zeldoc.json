@@ -1,0 +1,45 @@
+{
+  "zdev": {
+    "id": "zdev",
+    "name": "ZDev",
+    "description": "Coding model for repository understanding, refactors, and agentic engineering tasks",
+    "attachment": true,
+    "reasoning": true,
+    "reasoning_options": [
+      {
+        "type": "effort",
+        "values": [
+          "low",
+          "high",
+          "max"
+        ]
+      }
+    ],
+    "tool_call": true,
+    "interleaved": {
+      "field": "reasoning_content"
+    },
+    "structured_output": true,
+    "temperature": true,
+    "release_date": "2026-08-26",
+    "last_updated": "2026-08-26",
+    "modalities": {
+      "input": [
+        "text",
+        "image"
+      ],
+      "output": [
+        "text"
+      ]
+    },
+    "open_weights": false,
+    "limit": {
+      "context": 1000000,
+      "output": 131072
+    },
+    "cost": {
+      "input": 0,
+      "output": 0
+    }
+  }
+}

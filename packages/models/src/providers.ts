@@ -1,4 +1,4 @@
-import rawCatalog from "../data/api.json" with { type: "json" };
+import index from "../data/provider-index.json" with { type: "json" };
 import type {
   Catalog,
   CostTier,
@@ -147,7 +147,11 @@ function templateVars(api: string | undefined): string[] {
   return [...found];
 }
 
-function normalizeModel(providerId: string, key: string, raw: unknown): Model {
+function safeFileName(providerId: string): string {
+  return providerId.replace(/[^A-Za-z0-9.-]/g, "_");
+}
+
+export function normalizeModel(providerId: string, key: string, raw: unknown): Model {
   const model = record(raw);
   const id = string(model.id) ?? key;
   const providerQualifiedId = `${providerId}/${id}`;
@@ -190,15 +194,19 @@ function normalizeModel(providerId: string, key: string, raw: unknown): Model {
   };
 }
 
-function normalizeProvider(key: string, raw: unknown): Provider {
-  const provider = record(raw);
-  const id = string(provider.id) ?? key;
-  const rawModels = record(provider.models);
+function normalizeProviderModels(providerId: string, rawModels: unknown): Record<string, Model> {
   const models: Record<string, Model> = {};
-  for (const [modelKey, model] of Object.entries(rawModels)) {
-    const normalized = normalizeModel(id, modelKey, model);
+  for (const [modelKey, model] of Object.entries(record(rawModels))) {
+    const normalized = normalizeModel(providerId, modelKey, model);
     models[normalized.id] = normalized;
   }
+  return models;
+}
+
+function normalizeHeader(key: string, raw: unknown): ProviderHeader | undefined {
+  const provider = record(raw);
+  const id = string(provider.id) ?? key;
+  if (!id) return undefined;
   const env = Array.isArray(provider.env)
     ? provider.env.filter((item: unknown): item is string => typeof item === "string")
     : [];
@@ -210,27 +218,89 @@ function normalizeProvider(key: string, raw: unknown): Provider {
     npm: string(provider.npm),
     api,
     env,
-    modelCount: Object.keys(models).length,
+    modelCount: number(provider.modelCount) ?? 0,
     templated: vars.length > 0,
     templateVars: vars,
-    models,
   };
 }
 
-export const providers: Catalog = Object.freeze(
-  Object.fromEntries(
-    Object.entries(record(rawCatalog)).map(([id, provider]) => {
-      const normalized = normalizeProvider(id, provider);
-      return [normalized.id, normalized];
-    }),
-  ),
-);
-
+/**
+ * Cheap startup-safe provider list. Reads only the generated header index
+ * (226 rows, tens of KB) — never the multi-MB model payloads.
+ */
 export function listProviders(): ProviderHeader[] {
-  return Object.values(providers).map(({ models: _models, ...header }) => header);
+  const raw = record(index);
+  const list = Array.isArray(raw) ? raw : Object.values(raw);
+  const out: ProviderHeader[] = [];
+  for (const entry of list) {
+    const header = normalizeHeader(string(record(entry).id) ?? "", entry);
+    if (header) out.push(header);
+  }
+  return out.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 }
 
-export function listModels(providerId?: string): Model[] {
-  if (providerId) return Object.values(providers[providerId]?.models ?? {});
-  return listProviders().flatMap((header) => Object.values(providers[header.id].models));
+export function getProviderHeader(providerId: string): ProviderHeader | undefined {
+  return listProviders().find((header) => header.id === providerId);
 }
+
+const modelsCache = new Map<string, Record<string, Model>>();
+const modelsInflight = new Map<string, Promise<Record<string, Model>>>();
+
+/**
+ * Loads and normalizes a single provider's models on demand. Results are
+ * cached per process; concurrent callers share one in-flight load.
+ */
+export async function loadProviderModels(providerId: string): Promise<Record<string, Model>> {
+  const cached = modelsCache.get(providerId);
+  if (cached) return cached;
+  const inflight = modelsInflight.get(providerId);
+  if (inflight) return inflight;
+  const task = (async () => {
+    try {
+      const mod = await import(`../data/models/${safeFileName(providerId)}.json`, {
+        with: { type: "json" },
+      }) as { default: unknown };
+      const models = normalizeProviderModels(providerId, (mod as { default: unknown }).default);
+      modelsCache.set(providerId, models);
+      return models;
+    } finally {
+      modelsInflight.delete(providerId);
+    }
+  })();
+  modelsInflight.set(providerId, task);
+  return task;
+}
+
+export async function loadProvider(providerId: string): Promise<Provider | undefined> {
+  const header = getProviderHeader(providerId);
+  if (!header) return undefined;
+  const models = await loadProviderModels(providerId);
+  return { ...header, modelCount: Object.keys(models).length, models };
+}
+
+/** Backwards-compatible aliases over the lazy loader. */
+export async function getProvider(providerId: string): Promise<Provider | undefined> {
+  return loadProvider(providerId);
+}
+
+export async function getModel(providerId: string, modelId: string): Promise<Model | undefined> {
+  const models = await loadProviderModels(providerId).catch(() => undefined);
+  return models?.[modelId];
+}
+
+/**
+ * Lists models. With a provider id this loads one file; without one it loads
+ * everything (226 dynamic imports) — acceptable for scripts and tests, never
+ * call it from UI render paths.
+ */
+export async function listModels(providerId?: string): Promise<Model[]> {
+  if (providerId) return Object.values(await loadProviderModels(providerId));
+  const headers = listProviders();
+  const out: Model[] = [];
+  for (const header of headers) {
+    out.push(...Object.values(await loadProviderModels(header.id)));
+  }
+  return out;
+}
+
+export type { Catalog };

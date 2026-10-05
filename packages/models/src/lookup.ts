@@ -1,83 +1,28 @@
-import { providers } from "./providers.js";
 import type {
   AdapterSpec,
   Model,
   ModelCost,
-  Provider,
   ProviderHeader,
 } from "./types.js";
-
-export function getProvider(providerId: string): Provider | undefined {
-  return providers[providerId];
-}
-
-export function getProviderHeader(providerId: string): ProviderHeader | undefined {
-  const provider = providers[providerId];
-  if (!provider) return undefined;
-  const { models: _models, ...header } = provider;
-  return header;
-}
-
-export function getModel(providerId: string, modelId: string): Model | undefined {
-  return providers[providerId]?.models[modelId];
-}
-
-/**
- * Resolves a canonical id such as "openai/gpt-6-sol".
- *
- * A canonical model is frequently offered by many providers, so this prefers an
- * exact provider match. When the prefix does not name a provider in the catalog
- * it returns a result only when that result is unambiguous. It never guesses:
- * returning a model from a different provider than the caller asked for is
- * worse than returning undefined, because callers branch on truthiness and would
- * silently route to the wrong endpoint.
- */
-export function getModelByCanonicalId(canonicalId: string): Model | undefined {
-  const matches = findModelsByCanonicalId(canonicalId);
-  if (matches.length === 0) return undefined;
-  const providerId = canonicalId.split("/", 1)[0];
-  if (providerId) {
-    const exact = matches.filter((model) => model.providerId === providerId);
-    if (exact.length === 1) return exact[0];
-    if (exact.length > 1) return undefined;
-  }
-  return matches.length === 1 ? matches[0] : undefined;
-}
-
-export function findModelsByCanonicalId(canonicalId: string): Model[] {
-  return Object.values(providers).flatMap((provider) => Object.values(provider.models))
-    .filter((model) => model.canonicalId === canonicalId || model.providerQualifiedId === canonicalId);
-}
-
-export function findModels(query: string): Model[] {
-  const normalized = query.trim().toLowerCase();
-  if (!normalized) return [];
-  return Object.values(providers).flatMap((provider) =>
-    Object.values(provider.models).filter((model) =>
-      [model.canonicalId, model.name, model.family].some((value) => value?.toLowerCase().includes(normalized)),
-    ),
-  );
-}
-
-const DEFAULT_SDK = "@ai-sdk/openai-compatible";
 
 /**
  * Derives runtime construction instructions from catalog metadata alone.
  *
  * Per-model overrides win over provider defaults so that a single model served
- * through a bespoke endpoint is not forced onto the provider's SDK.
+ * through a bespoke endpoint is not forced onto the provider's SDK. The
+ * provider header is required because Model carries identity, not transport
+ * metadata — obtain it cheaply via listProviders()/getProviderHeader().
  */
-export function resolveAdapter(model: Model): AdapterSpec {
-  const provider = providers[model.providerId];
-  const sdk = model.sdkOverride ?? provider?.npm ?? DEFAULT_SDK;
-  const baseUrl = model.apiOverride ?? provider?.api;
-  const templated = provider?.templated === true;
+export function resolveAdapter(model: Model, provider: ProviderHeader): AdapterSpec {
+  const sdk = model.sdkOverride ?? provider.npm ?? "@ai-sdk/openai-compatible";
+  const baseUrl = model.apiOverride ?? provider.api;
+  const templated = provider.templated;
   return {
     sdk,
     baseUrl,
-    apiKeyEnv: provider?.env.length === 1 ? provider.env[0] : undefined,
+    apiKeyEnv: provider.env.length === 1 ? provider.env[0] : undefined,
     requiresTemplateVars: templated || undefined,
-    templateVars: templated ? provider?.templateVars : undefined,
+    templateVars: templated ? provider.templateVars : undefined,
   };
 }
 

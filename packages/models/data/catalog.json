@@ -439,7 +439,7 @@
           "output": 32768
         },
         "cost": {
-          "input": 0.15,
+          "input": 0.2,
           "output": 0.4
         },
         "reasoning": true,
@@ -7376,40 +7376,16 @@
       "BLUECLAW_API_KEY"
     ],
     "models": {
-      "Qwen3.6-27B": {
-        "id": "Qwen3.6-27B",
-        "canonicalId": "alibaba/qwen3.6-27b",
-        "providerQualifiedId": "blueclaw/Qwen3.6-27B",
-        "name": "Qwen3.6 27B",
-        "family": "qwen",
-        "status": "beta",
-        "limit": {
-          "context": 196608,
-          "output": 65536
-        },
-        "reasoning": true,
-        "toolCall": true,
-        "temperature": true,
-        "attachment": false,
-        "modalities": {
-          "input": [
-            "text"
-          ],
-          "output": [
-            "text"
-          ]
-        }
-      },
-      "Qwen/Qwen3.6-35B-A3B-FP8": {
-        "id": "Qwen/Qwen3.6-35B-A3B-FP8",
-        "canonicalId": "alibaba/qwen3.6-35b-a3b",
-        "providerQualifiedId": "blueclaw/Qwen/Qwen3.6-35B-A3B-FP8",
-        "name": "Qwen3.6 35B A3B FP8",
+      "Qwen3.8-27B": {
+        "id": "Qwen3.8-27B",
+        "canonicalId": "alibaba/qwen3.8-27b",
+        "providerQualifiedId": "blueclaw/Qwen3.8-27B",
+        "name": "Qwen3.8 27B",
         "family": "qwen",
         "status": "beta",
         "limit": {
           "context": 131072,
-          "output": 65536
+          "output": 32768
         },
         "reasoning": true,
         "toolCall": true,
@@ -36595,44 +36571,45 @@
       "SUBCONSCIOUS_API_KEY"
     ],
     "models": {
-      "subconscious/tim-qwen3.6-27b": {
-        "id": "subconscious/tim-qwen3.6-27b",
-        "canonicalId": "subconscious/subconscious/tim-qwen3.6-27b",
-        "providerQualifiedId": "subconscious/subconscious/tim-qwen3.6-27b",
-        "name": "TIM-Qwen3.6 27B",
+      "subconscious/deepseek-v4.1-flash-marathon": {
+        "id": "subconscious/deepseek-v4.1-flash-marathon",
+        "canonicalId": "deepseek/deepseek-v4.1-flash",
+        "providerQualifiedId": "subconscious/subconscious/deepseek-v4.1-flash-marathon",
+        "name": "DeepSeek V4.1 Flash Marathon",
+        "family": "deepseek-flash",
         "status": "active",
         "limit": {
-          "context": 8192,
-          "input": 8192,
-          "output": 5000
+          "context": 5000000,
+          "output": 384000
         },
         "cost": {
-          "input": 0.3,
-          "output": 3,
-          "cache_read": 0.15
+          "input": 0.14,
+          "output": 0.28,
+          "cache_read": 0.0028
         },
         "reasoning": true,
         "toolCall": true,
         "temperature": true,
-        "attachment": false,
+        "attachment": true,
         "modalities": {
           "input": [
-            "text"
+            "text",
+            "image"
           ],
           "output": [
             "text"
           ]
         }
       },
-      "subconscious/glm-5.2": {
-        "id": "subconscious/glm-5.2",
-        "canonicalId": "zhipuai/glm-5.2",
-        "providerQualifiedId": "subconscious/subconscious/glm-5.2",
-        "name": "GLM-5.2",
+      "subconscious/glm-5.3-marathon": {
+        "id": "subconscious/glm-5.3-marathon",
+        "canonicalId": "zhipuai/glm-5.3",
+        "providerQualifiedId": "subconscious/subconscious/glm-5.3-marathon",
+        "name": "GLM-5.3 Marathon",
         "family": "glm",
         "status": "active",
         "limit": {
-          "context": 1000000,
+          "context": 5000000,
           "output": 131072
         },
         "cost": {
@@ -43300,6 +43277,36 @@
         "modalities": {
           "input": [
             "text"
+          ],
+          "output": [
+            "text"
+          ]
+        }
+      },
+      "luminal/deepseek-ai/DeepSeek-V4.1-Flash": {
+        "id": "luminal/deepseek-ai/DeepSeek-V4.1-Flash",
+        "canonicalId": "llmgateway-providers/luminal/deepseek-ai/DeepSeek-V4.1-Flash",
+        "providerQualifiedId": "llmgateway-providers/luminal/deepseek-ai/DeepSeek-V4.1-Flash",
+        "name": "luminal/DeepSeek-V4.1-Flash (luminal)",
+        "family": "deepseek",
+        "status": "active",
+        "limit": {
+          "context": 1000000,
+          "output": 1000000
+        },
+        "cost": {
+          "input": 0.135,
+          "output": 0.54,
+          "cache_read": 0.0027
+        },
+        "reasoning": true,
+        "toolCall": true,
+        "temperature": true,
+        "attachment": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
           ],
           "output": [
             "text"
@@ -56085,7 +56092,7 @@
           "output": 943718
         },
         "cost": {
-          "input": 0.6381,
+          "input": 0.6313,
           "output": 13,
           "cache_read": 0.45
         },
@@ -57196,12 +57203,13 @@
         "family": "deepseek",
         "status": "active",
         "limit": {
-          "context": 163840,
-          "output": 147456
+          "context": 128000,
+          "output": 115200
         },
         "cost": {
-          "input": 0.25,
-          "output": 1
+          "input": 0.29,
+          "output": 1.14,
+          "cache_read": 0.11
         },
         "reasoning": false,
         "toolCall": true,
@@ -57544,9 +57552,9 @@
           "output": 128000
         },
         "cost": {
-          "input": 0.0825,
-          "output": 0.33,
-          "cache_read": 0.020625
+          "input": 0.13,
+          "output": 0.53,
+          "cache_read": 0.033
         },
         "reasoning": true,
         "toolCall": true,
@@ -57601,9 +57609,9 @@
           "output": 64000
         },
         "cost": {
-          "input": 0.7506,
-          "output": 2.2509,
-          "cache_read": 0.0378
+          "input": 0.834,
+          "output": 2.501,
+          "cache_read": 0.042
         },
         "reasoning": true,
         "toolCall": true,
@@ -59224,12 +59232,12 @@
         "status": "active",
         "limit": {
           "context": 1048576,
-          "output": 943718
+          "output": 131072
         },
         "cost": {
-          "input": 0.06,
-          "output": 5,
-          "cache_read": 0.05
+          "input": 0.03,
+          "output": 16,
+          "cache_read": 0.03
         },
         "reasoning": true,
         "toolCall": true,
@@ -62568,7 +62576,7 @@
         "status": "active",
         "limit": {
           "context": 262144,
-          "output": 131072
+          "output": 32768
         },
         "cost": {
           "input": 0.039,
@@ -62958,9 +62966,9 @@
           "output": 131072
         },
         "cost": {
-          "input": 0.115,
-          "output": 0.28,
-          "cache_read": 0.11
+          "input": 0.099,
+          "output": 0.252,
+          "cache_read": 0.0025
         },
         "reasoning": true,
         "toolCall": true,
@@ -65224,7 +65232,7 @@
         "status": "active",
         "limit": {
           "context": 262144,
-          "output": 81920
+          "output": 262140
         },
         "cost": {
           "input": 0.45,
@@ -85217,7 +85225,7 @@
           "output": 943718
         },
         "cost": {
-          "input": 0.6381,
+          "input": 0.6313,
           "output": 13,
           "cache_read": 0.45
         },
@@ -86365,9 +86373,9 @@
           "output": 943718
         },
         "cost": {
-          "input": 0.85,
+          "input": 0.55,
           "output": 5,
-          "cache_read": 0.7
+          "cache_read": 0.45
         },
         "reasoning": true,
         "toolCall": true,
@@ -86419,11 +86427,12 @@
         "status": "active",
         "limit": {
           "context": 163840,
-          "output": 147456
+          "output": 115200
         },
         "cost": {
-          "input": 0.25,
-          "output": 1
+          "input": 0.29,
+          "output": 1.14,
+          "cache_read": 0.11
         },
         "reasoning": false,
         "toolCall": true,
@@ -86565,9 +86574,9 @@
           "output": 943718
         },
         "cost": {
-          "input": 0.0224,
+          "input": 0.0281,
           "output": 1.28,
-          "cache_read": 0.0224
+          "cache_read": 0.0281
         },
         "reasoning": true,
         "toolCall": true,
@@ -86766,9 +86775,9 @@
           "output": 128000
         },
         "cost": {
-          "input": 0.0825,
-          "output": 0.33,
-          "cache_read": 0.020625
+          "input": 0.132,
+          "output": 0.528,
+          "cache_read": 0.033
         },
         "reasoning": true,
         "toolCall": true,
@@ -86823,9 +86832,9 @@
           "output": 64000
         },
         "cost": {
-          "input": 0.7506,
-          "output": 2.2509,
-          "cache_read": 0.0378
+          "input": 0.834,
+          "output": 2.501,
+          "cache_read": 0.042
         },
         "reasoning": true,
         "toolCall": true,
@@ -87580,9 +87589,9 @@
           "output": 131072
         },
         "cost": {
-          "input": 0.104,
-          "output": 8,
-          "cache_read": 0.1
+          "input": 0.016,
+          "output": 16,
+          "cache_read": 0.016
         },
         "reasoning": true,
         "toolCall": true,
@@ -88506,12 +88515,12 @@
         "status": "active",
         "limit": {
           "context": 1048576,
-          "output": 943718
+          "output": 131072
         },
         "cost": {
-          "input": 0.06,
-          "output": 5,
-          "cache_read": 0.05
+          "input": 0.03,
+          "output": 16,
+          "cache_read": 0.03
         },
         "reasoning": true,
         "toolCall": true,
@@ -91695,9 +91704,9 @@
           "output": 943718
         },
         "cost": {
-          "input": 0.72,
-          "output": 13,
-          "cache_read": 0.7
+          "input": 0.67,
+          "output": 14,
+          "cache_read": 0.22
         },
         "reasoning": true,
         "toolCall": true,
@@ -92040,12 +92049,12 @@
         "status": "active",
         "limit": {
           "context": 262144,
-          "output": 131072
+          "output": 32768
         },
         "cost": {
-          "input": 0.0595,
-          "output": 0.17,
-          "cache_read": 0.02975
+          "input": 0.06,
+          "output": 0.16,
+          "cache_read": 0.03
         },
         "reasoning": true,
         "toolCall": true,
@@ -94835,11 +94844,12 @@
         "status": "active",
         "limit": {
           "context": 262144,
-          "output": 81920
+          "output": 262140
         },
         "cost": {
           "input": 0.32,
-          "output": 3.2
+          "output": 2.7,
+          "cache_read": 0.03
         },
         "reasoning": true,
         "toolCall": true,
@@ -95665,16 +95675,16 @@
           "output": 128000
         },
         "cost": {
-          "input": 4,
-          "output": 20,
-          "cache_read": 0.4,
-          "cache_write": 5,
+          "input": 2,
+          "output": 10,
+          "cache_read": 0.2,
+          "cache_write": 2.5,
           "tiers": [
             {
-              "input": 8,
-              "output": 30,
-              "cache_read": 0.8,
-              "cache_write": 10,
+              "input": 4,
+              "output": 15,
+              "cache_read": 0.4,
+              "cache_write": 5,
               "tier": {
                 "type": "context",
                 "size": 272000
@@ -95682,10 +95692,10 @@
             }
           ],
           "context_over_200k": {
-            "input": 8,
-            "output": 30,
-            "cache_read": 0.8,
-            "cache_write": 10
+            "input": 4,
+            "output": 15,
+            "cache_read": 0.4,
+            "cache_write": 5
           }
         },
         "reasoning": true,
@@ -99103,6 +99113,67 @@
             "text",
             "image",
             "video"
+          ],
+          "output": [
+            "text"
+          ]
+        }
+      },
+      "deepseek-v4.1-flash-fast": {
+        "id": "deepseek-v4.1-flash-fast",
+        "canonicalId": "deepseek/deepseek-v4.1-flash",
+        "providerQualifiedId": "coralbricks/deepseek-v4.1-flash-fast",
+        "name": "DeepSeek V4.1 Flash",
+        "family": "deepseek-flash",
+        "status": "active",
+        "limit": {
+          "context": 1048576,
+          "output": 131072
+        },
+        "cost": {
+          "input": 0.3,
+          "output": 1.2,
+          "cache_read": 0,
+          "cache_write": 0.09
+        },
+        "reasoning": true,
+        "toolCall": true,
+        "temperature": true,
+        "attachment": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        }
+      },
+      "glm-5.3-fast": {
+        "id": "glm-5.3-fast",
+        "canonicalId": "zhipuai/glm-5.3",
+        "providerQualifiedId": "coralbricks/glm-5.3-fast",
+        "name": "GLM-5.3",
+        "family": "glm",
+        "status": "active",
+        "limit": {
+          "context": 1048576,
+          "output": 131072
+        },
+        "cost": {
+          "input": 1.12,
+          "output": 4.4,
+          "cache_read": 0,
+          "cache_write": 1.68
+        },
+        "reasoning": true,
+        "toolCall": true,
+        "temperature": true,
+        "attachment": false,
+        "modalities": {
+          "input": [
+            "text"
           ],
           "output": [
             "text"
@@ -132934,7 +133005,8 @@
         "modalities": {
           "input": [
             "text",
-            "image"
+            "image",
+            "pdf"
           ],
           "output": [
             "text"
@@ -133085,7 +133157,8 @@
           "input": [
             "text",
             "image",
-            "video"
+            "video",
+            "pdf"
           ],
           "output": [
             "text"
@@ -148739,8 +148812,9 @@
           "output": 32000
         },
         "cost": {
-          "input": 0,
-          "output": 0
+          "input": 0.075,
+          "output": 0.22,
+          "cache_read": 0.015
         },
         "reasoning": true,
         "toolCall": true,
@@ -148800,34 +148874,6 @@
           "input": 0.075,
           "output": 0.22,
           "cache_read": 0.015
-        },
-        "reasoning": true,
-        "toolCall": true,
-        "temperature": false,
-        "attachment": false,
-        "modalities": {
-          "input": [
-            "text"
-          ],
-          "output": [
-            "text"
-          ]
-        }
-      },
-      "inclusionai/ling-3.0-flash-sante-free": {
-        "id": "inclusionai/ling-3.0-flash-sante-free",
-        "canonicalId": "vercel/inclusionai/ling-3.0-flash-sante-free",
-        "providerQualifiedId": "vercel/inclusionai/ling-3.0-flash-sante-free",
-        "name": "Ling 3.0 Flash Sante (Free)",
-        "family": "ling",
-        "status": "active",
-        "limit": {
-          "context": 256000,
-          "output": 32000
-        },
-        "cost": {
-          "input": 0,
-          "output": 0
         },
         "reasoning": true,
         "toolCall": true,
@@ -237292,6 +237338,36 @@
             "video",
             "audio",
             "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        }
+      },
+      "deepseek-ai/DeepSeek-V4.1-Flash": {
+        "id": "deepseek-ai/DeepSeek-V4.1-Flash",
+        "canonicalId": "llmgateway/deepseek-ai/DeepSeek-V4.1-Flash",
+        "providerQualifiedId": "llmgateway/deepseek-ai/DeepSeek-V4.1-Flash",
+        "name": "luminal/DeepSeek-V4.1-Flash",
+        "family": "deepseek",
+        "status": "active",
+        "limit": {
+          "context": 1000000,
+          "output": 1000000
+        },
+        "cost": {
+          "input": 0.135,
+          "output": 0.54,
+          "cache_read": 0.0027
+        },
+        "reasoning": true,
+        "toolCall": true,
+        "temperature": true,
+        "attachment": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
           ],
           "output": [
             "text"

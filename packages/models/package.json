@@ -1,6 +1,6 @@
 {
   "name": "@explore-ai/models",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Provider-qualified AI model catalog for Sylix and Explore.",
   "license": "MIT",
   "author": "Sylix (Explore AI)",
@@ -30,7 +30,10 @@
     "./api.json": "./data/api.json",
     "./models.json": "./data/models.json",
     "./catalog.json": "./data/catalog.json",
-    "./stats.json": "./data/stats.json"
+    "./stats.json": "./data/stats.json",
+    "./provider-index.json": "./data/provider-index.json",
+    "./search-index.json": "./data/search-index.json",
+    "./models/*.json": "./data/models/*.json"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

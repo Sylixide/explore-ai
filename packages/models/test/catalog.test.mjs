@@ -18,7 +18,6 @@ const CONFIRMED_CANONICAL_IDS = [
   "openai/gpt-6-sol",
   "openai/gpt-6-luna",
   "openai/gpt-6.1-sol",
-  "openai/gpt-5.6",
   "openai/gpt-5.6-cyber",
   "openai/gpt-5.6-luna",
   "openai/gpt-5.6-terra",
@@ -75,6 +74,21 @@ test("openai runtime ids map to their canonical identities", async () => {
     const model = await getModel("openai", runtimeId);
     assert.equal(model?.canonicalId, canonical, `wrong canonical for openai/${runtimeId}`);
   }
+});
+
+test("runtime ids are not canonical keys", async () => {
+  // openai/gpt-5.6 exists as a runtime key and canonicalizes to
+  // openai/gpt-5.6-sol, but it is not itself a canonical identity. Keeping
+  // runtime-only spellings out of CONFIRMED_CANONICAL_IDS is deliberate:
+  // a canonical lookup for one must return nothing rather than a guess.
+  assert.deepEqual(await findModelsByCanonicalId("openai/gpt-5.6"), []);
+  // ...while the canonical it points at does resolve, via the runtime entry.
+  const sol = await findModelsByCanonicalId("openai/gpt-5.6-sol");
+  assert.ok(sol.length > 0, "openai/gpt-5.6-sol should be a resolvable canonical");
+  assert.ok(
+    sol.some((m) => m.providerQualifiedId === "openai/gpt-5.6"),
+    "openai/gpt-5.6-sol should resolve to the openai/gpt-5.6 runtime entry",
+  );
 });
 
 test("canonical resolution never returns a mismatched identity", async () => {
